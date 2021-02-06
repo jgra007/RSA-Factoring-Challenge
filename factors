@@ -1,31 +1,30 @@
 #!/usr/bin/python3
-"""Factorize all the things! """
-
+"""read_file
+    """
 from sys import argv
 
 
-def factorize(filename):
+def factory(n=0):
+    if (n % 2 == 0):
+        return 2
+    i = 3
+    while i * i <= n:
+        if n % i == 0:
+            return i
+        i += 2
+
+
+def factors(filename):
+    """read_file(filename)
+    Keyword Arguments:
+        filename {str} -- name of the file (default: {""})
     """
-    Factorize as many numbers as possible into a
-    product of two smaller numbers """
-
-    with open(filename, 'r+') as f:
-        for number in f:
-            num = int(number)
-
-            if num % 2 == 0:
-                value = num // 2
-                print("{}={}*{}".format(num, int(value), 2))
-                continue
-            else:
-                i = 3
-                while (num >= i):
-                    if num % i == 0:
-                        value = num // i
-                        print("{}={}*{}".format(num, int(value), i))
-                        break
-                    i += 2
+    with open(filename, encoding="utf-8") as my_file:
+        for i in my_file.readlines():
+            n = int(i)
+            result = factory(n)
+            print("{}={}*{}".format(int(n), int(n//result), int(result)))
 
 
 if __name__ == "__main__":
-    factorize(argv[1])
+    factors(argv[1])
