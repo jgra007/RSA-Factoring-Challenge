@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 """Module that factorize as many numbers as possible
  into a product of two smaller numbers."""
+# library to get arguments
 import sys
 
 
+# fn unpack number factorial
 def fc():
     """
     function fc to search file to convert number and format n=p*q
