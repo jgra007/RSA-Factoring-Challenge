@@ -1,43 +1,68 @@
-#!/usr/bin/env python3
-# RSA factoring challenge
-import sys
-import os
-if len(sys.argv) != 2:
-    print("Usage:", sys.argv[0], "file")
-    exit(1)
-if not os.path.isfile(sys.argv[1]):
-    print(sys.argv[0]+":", "File", sys.argv[1], "not found.")
-    exit(1)
+#!/usr/bin/python3
+from sys import argv
+from time import time
+from itertools import count, islice
 
 
-def rho(n, c):
-    t = 2
-    h = 2
-    d = 1
-
-    while d == 1:
-        t = (t*t + c) % n
-        h = (h*h + c) % n
-        h = (h*h + c) % n
-        d = gcd(t-h, n)
-
-    if d == n:
-        return rho(n, c+1)
-    return d
+def is_prime(n):
+    """NOT UTILIZED"""
+    return n > 1 and all((n % i) for i in islice(count(2), int(n**0.5 - 1)))
 
 
-def gcd(a, b):
-    if(b == 0):
-        return a
-    else:
-        return gcd(b, a % b)
+def factorize_prime(n):
+    """NOT UTILIZED"""
+    if is_prime(n):
+        print("{:d}={:d}*{:d}".format(n, n, 1))
 
 
-with open(sys.argv[1]) as f:
-    for to_factor in f:
-        to_factor = int(to_factor)
-        if not to_factor % 2:
-            print("{}={}*2".format(to_factor, to_factor // 2))
-            continue
-        mul = rho(to_factor, 1)
-        print("{}={}*{}".format(to_factor, to_factor // mul, mul))
+def factorize_reverse(SQR, n):
+    """NOT UTILIZED"""
+    i = SQR
+    while i > 2:
+        if n % i == 0:
+            print("{:d}={:d}*{:d}".format(n, i, int(n / i)))
+            break
+
+
+def factors_n(SQR, n):
+    """NOT UTILIZED"""
+    l = list([n//i, i]
+             for i in islice(count(2), int(n**0.5 - 1)) if n % i == 0)
+    """l = list([i, n//i] for i in range(1, SQR) if (n % i) == 0)"""
+    return set([item for sublist in l for item in sublist])
+
+
+def factorize_n(SQR, n):
+    """finds and prints factors"""
+    found = 0
+    for i in range(2, SQR):
+        if ((n % i) == 0):
+            print("{:d}={:d}*{:d}".format(n, int(n / i), i))
+            found = 1
+            break
+    if not found:
+        print("{:d}={:d}*{:d}".format(n, n, 1))
+
+
+def initialize_process(n):
+    """sets square root, and finds factors for each integer number"""
+    SQR = int(n**0.5)
+    factorize_n(SQR, n)
+
+
+def main():
+    """main function with timer, that parses input file and finds factors"""
+    start_t = time()
+    fd = open(argv[1], 'r')
+    file_lines = fd.readlines()
+    fd.close()
+    num_lines = len(file_lines)
+    file_lines = sorted(file_lines, key=lambda x: len(x))
+    for line in file_lines:
+        initialize_process(int(line))
+    end_t = time()
+    print("Time to run =", (end_t - start_t))
+
+
+if __name__ == "__main__":
+    main()
